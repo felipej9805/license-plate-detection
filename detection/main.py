@@ -6,13 +6,15 @@ import matplotlib.pyplot as plt
 import easyocr
 
 import util
-import json
-
-from flask import Flask
+from flask import Flask, jsonify
+from flask_cors import CORS, cross_origin
 app = Flask(__name__)
+CORS(app, resources={r"/*": {"origins": "*"}})
+
 
 @app.route('/detection', methods=['GET'])
-def api_endpoint():
+def api_endpoint(): 
+    
     # define constants
     model_cfg_path = os.path.join('.', 'model', 'cfg', 'darknet-yolov3.cfg')
     model_weights_path = os.path.join('.', 'model', 'weights', 'model.weights')
@@ -113,7 +115,9 @@ def api_endpoint():
         # plt.imshow(cv2.cvtColor(license_plate_thresh, cv2.COLOR_BGR2RGB))
         # plt.show()
 
-    response = {'message': text}
+    response = jsonify(message=text)
+
+    response.headers.add('Access-Control-Allow-Origin', '*')
     return response
 
 if __name__ == '__main__':
