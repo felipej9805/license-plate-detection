@@ -1,10 +1,8 @@
 import os
-
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 import easyocr
-
 import util
 from flask import Flask, jsonify
 from flask_cors import CORS, cross_origin
@@ -13,17 +11,18 @@ CORS(app, resources={r"/*": {"origins": "*"}})
 
 
 @app.route('/detection', methods=['GET'])
-def api_endpoint(): 
-    
+def api_endpoint():
+
     # define constants
     model_cfg_path = os.path.join('.', 'model', 'cfg', 'darknet-yolov3.cfg')
     model_weights_path = os.path.join('.', 'model', 'weights', 'model.weights')
     class_names_path = os.path.join('.', 'model', 'class.names')
 
     input_dir = "./data"
-
+   
     for img_name in os.listdir(input_dir):
         img_path = os.path.join(input_dir, img_name)
+       
 
         # load class names
         with open(class_names_path, 'r') as f:
@@ -51,11 +50,11 @@ def api_endpoint():
         bboxes = []
         class_ids = []
         scores = []
-
+        
         for detection in detections:
             # [x1, x2, x3, x4, x5, x6, ..., x85]
             bbox = detection[:4]
-
+            
             xc, yc, w, h = bbox
             bbox = [int(xc * W), int(yc * H), int(w * W), int(h * H)]
 
@@ -83,22 +82,24 @@ def api_endpoint():
             #             7,
             #             (0, 255, 0),
             #             15)
-            license_plate = img[int(yc - (h / 2)):int(yc + (h / 2)) , int(xc - (w / 2)):int(xc + (w / 2)), :].copy()
+            license_plate = img[int(
+                yc - (h / 2)):int(yc + (h / 2)), int(xc - (w / 2)):int(xc + (w / 2)), :].copy()
             img = cv2.rectangle(img,
                                 (int(xc - (w / 2)), int(yc - (h / 2))),
                                 (int(xc + (w / 2)), int(yc + (h / 2))),
                                 (0, 255, 0),
                                 10)
 
-            license_plate_gray = cv2.cvtColor(license_plate, cv2.COLOR_BGR2GRAY)
-            _, license_plate_thresh = cv2.threshold(license_plate_gray, 64, 255, cv2.THRESH_BINARY_INV)
-
+            license_plate_gray = cv2.cvtColor(
+                license_plate, cv2.COLOR_BGR2GRAY)
+            _, license_plate_thresh = cv2.threshold(
+                license_plate_gray, 64, 255, cv2.THRESH_BINARY_INV)
 
             output = reader.readtext(license_plate_thresh)
-            output_text = ""
-            for out in output: 
+            
+            for out in output:
                 text_bbox, text, text_score = out
-                #if text_score > 0.1:
+                # if text_score > 0.1:
                 output_text = text
                 print(text,  text_score)
 
@@ -107,7 +108,7 @@ def api_endpoint():
 
         # plt.figure()
         # plt.imshow(cv2.cvtColor(license_plate, cv2.COLOR_BGR2RGB))
-        
+
         # plt.figure()
         # plt.imshow(cv2.cvtColor(license_plate_gray, cv2.COLOR_BGR2RGB))
 
@@ -120,9 +121,6 @@ def api_endpoint():
     response.headers.add('Access-Control-Allow-Origin', '*')
     return response
 
+
 if __name__ == '__main__':
     app.run()
-
-
-
-
