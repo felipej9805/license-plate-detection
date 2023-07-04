@@ -4,3 +4,4 @@ numpy==1.23.3
 flask-cors
 Pillow
 easyocr
+python-dotenv
