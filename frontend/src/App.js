@@ -12,7 +12,7 @@ function App() {
     try {
       setLoading(true); // Activar el indicador de carga
 
-      const response = await fetch('http://localhost:5000/detection', {
+      const response = await fetch(`http://${process.env.REACT_APP_DETECTION}/detection`, {
         method: 'GET',
       });
 
@@ -35,11 +35,11 @@ function App() {
       <div className="row justify-content-center align-items-center h-100">
         <div className="col text-center">
           <img
-              src="https://images8.alphacoders.com/282/282535.jpg"
-              alt="Mountain"
-              className="img-fluid rounded-circle mb-4"
-              style={{ maxWidth: '500px' }}
-            />
+            src="https://images8.alphacoders.com/282/282535.jpg"
+            alt="Mountain"
+            className="img-fluid rounded-circle mb-4"
+            style={{ maxWidth: '500px' }}
+          />
           <h1 className="mt-5">Identificar Placa</h1>
           <button
             className="btn btn-primary mt-3"
@@ -62,7 +62,12 @@ function App() {
         <Modal.Body>
           {loading ? (
             <div className="d-flex justify-content-center">
-              <ThreeDots type="ThreeDots" color="#000" height={50} width={50} />
+              <ThreeDots
+                type="ThreeDots"
+                color="#000"
+                height={50}
+                width={50}
+              />
             </div>
           ) : (
             <div className="result display-4">{result}</div>
