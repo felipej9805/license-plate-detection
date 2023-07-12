@@ -23,4 +23,4 @@ ENV PORT_DETECTION=5000
 EXPOSE $PORT_DETECTION
 
 # Run the Flask application
-ENTRYPOINT ["flask", "run", "--host=0.0.0.0", "--port=$PORT_DETECTION"]
+CMD [ "sh", "-c", "flask run --host 0.0.0.0 --port ${PORT_DETECTION}"]
