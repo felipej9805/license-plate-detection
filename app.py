@@ -132,5 +132,5 @@ def api_endpoint():
 
 
 if __name__ == '__main__':
-    port = int(os.environ.get('PORT_DETECTION', 5000))
+    port = int(os.environ.get('PORT_DETECTION', 5002))
     app.run(port=port)
