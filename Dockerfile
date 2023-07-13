@@ -16,9 +16,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 # Set the environment variable for Flask and the exposed port
-ENV FLASK_APP=app.py
-ENV PORT_DETECTION=5000
-
+ENV PORT_DETECTION=5002
+ENV FLASK_APP=app
 # Expose the specified port
 EXPOSE $PORT_DETECTION
 
